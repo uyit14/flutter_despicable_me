@@ -14,7 +14,8 @@ class CharacterWidget extends StatelessWidget {
       onTap: (){
         Navigator.push(context, PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 350),
-          pageBuilder: (context, _, __) => CharacterDetailScreen()
+            pageBuilder: (context, _, __) =>
+                CharacterDetailScreen(character: characters[0])
         ));
       },
       child: Stack(
@@ -23,22 +24,28 @@ class CharacterWidget extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: ClipPath(
               clipper: CharacterCardBackgroundClipper(),
-              child: Container(
-                height: 0.6 * screenHeight,
-                width: 0.9 * screenWidth,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: characters[0].colors,
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft)),
+              child: Hero(
+                tag: "background-${characters[0].name}",
+                child: Container(
+                  height: 0.6 * screenHeight,
+                  width: 0.9 * screenWidth,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: characters[0].colors,
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft)),
+                ),
               ),
             ),
           ),
           Align(
             alignment: Alignment(0, -0.5),
-            child: Image.asset(
-              characters[0].imagePath,
-              height: screenHeight * 0.55,
+            child: Hero(
+              tag: "image-{$characters[0].name}",
+              child: Image.asset(
+                characters[0].imagePath,
+                height: screenHeight * 0.55,
+              ),
             ),
           ),
           Padding(
@@ -47,7 +54,14 @@ class CharacterWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(characters[0].name, style: AppTheme.heading,),
+                Hero(
+                    tag: "name-${characters[0].name}",
+                    child: Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          characters[0].name, style: AppTheme.heading,)
+                    )
+                ),
                 Text('Tap to Read more', style: AppTheme.subHeading,)
               ],
             ),
